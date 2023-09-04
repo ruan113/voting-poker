@@ -1,0 +1,8 @@
+<app-connect-to-room
+  *ngIf="activeScreen === 'ConnectToRoom'"
+></app-connect-to-room>
+
+<div *ngIf="activeScreen === 'Lobby'">
+  <button (click)="goToSharedRoom()">Criar sala</button>
+  <button (click)="goToConnectToRoomScreen()">Conectar a sala</button>
+</div>

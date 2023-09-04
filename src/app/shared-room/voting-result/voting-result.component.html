@@ -1,0 +1,15 @@
+<div class="container d-flex">
+  <div class="result-cards-container d-flex">
+    <div *ngFor="let card of result.cards" class="card-container">
+      <div class="card-body">
+        <span class="unselectable">{{ card.value }}</span>
+      </div>
+
+      <span class="unselectable">{{ card.chosenCount }}</span>
+    </div>
+  </div>
+  <div>
+    <span class="unselectable">Average:</span>
+    <span class="unselectable">{{ result.avg }}</span>
+  </div>
+</div>

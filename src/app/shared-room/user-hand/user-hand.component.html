@@ -1,0 +1,11 @@
+<div class="user-hand-container">
+  <div *ngFor="let option of options" class="card-container">
+    <div
+      class="card-body clickable"
+      [ngClass]="{ chosen: choice === option }"
+      (click)="setChoice(option)"
+    >
+      <span class="unselectable">{{ option }}</span>
+    </div>
+  </div>
+</div>

@@ -1,11 +1,13 @@
-<div class="container d-flex">
+<div class="container">
   <div class="result-cards-container d-flex">
     <div *ngFor="let card of result.cards" class="card-container">
       <div class="card-body">
         <span class="unselectable">{{ card.value }}</span>
       </div>
 
-      <span class="unselectable">{{ card.chosenCount }}</span>
+      <span class="unselectable" style="margin-top: 5px">{{
+        card.chosenCount + ' Vote' + (card.chosenCount > 1 ? 's' : '')
+      }}</span>
     </div>
   </div>
   <div>

@@ -1,8 +1,8 @@
 import { DataConnection } from 'peerjs';
+import { boardState } from 'src/_shared/board';
 import { EventListenerContainer } from 'src/_shared/types/event-types';
 import {
   BoardReseted,
-  BoardState,
   ChoiceConfirmed,
   UpdateBoardState,
   UserChoicesRevealed,
@@ -10,14 +10,9 @@ import {
 import { UserService } from './user.service';
 
 export class ClientService implements UserService {
-  boardState: BoardState = {
-    areUserChoicesRevealed: false,
-    users: [],
-  };
-
   listeners: EventListenerContainer<UpdateBoardState> = {
     UpdateBoardState: async (event: UpdateBoardState) => {
-      this.boardState = event.data;
+      boardState.updateBoardState(event.data);
     },
   };
 
@@ -33,7 +28,7 @@ export class ClientService implements UserService {
     });
   }
 
-  submitChoice(newChoice?: number): void {
+  submitChoice(newChoice?: string): void {
     const event: ChoiceConfirmed = {
       type: 'ChoiceConfirmed',
       data: {
@@ -41,14 +36,9 @@ export class ClientService implements UserService {
         peerId: this.peerId,
       },
     };
-    const user = this.boardState.users.find((it) => it.peerId === this.peerId);
-    if (user) user.choice = newChoice;
+    boardState.setUserChoice(this.peerId, newChoice);
 
     this.hostConnection.send(event);
-  }
-
-  getBoardState(): BoardState {
-    return this.boardState;
   }
 
   resetChoices(): void {
@@ -56,11 +46,7 @@ export class ClientService implements UserService {
       type: 'BoardReseted',
       data: {},
     };
-    for (const user of this.boardState.users) {
-      user.choice = undefined;
-    }
-    this.boardState.areUserChoicesRevealed = false;
-
+    boardState.initializeNewRound();
     this.hostConnection.send(event);
   }
 
@@ -69,12 +55,11 @@ export class ClientService implements UserService {
       type: 'UserChoicesRevealed',
       data: {},
     };
-    this.boardState.areUserChoicesRevealed = true;
+    boardState.revealUserChoices();
     this.hostConnection.send(event);
   }
 
-  getUserCurrentChoice(): number | undefined {
-    const user = this.boardState.users.find((it) => it.peerId === this.peerId);
-    return user?.choice;
+  getUserCurrentChoice(): string | undefined {
+    return boardState.getUserChoice(this.peerId);
   }
 }

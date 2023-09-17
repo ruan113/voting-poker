@@ -1,11 +1,20 @@
-<div class="container" *ngIf="isConnected">
-  Shared Room from {{ peerIdFromRoute }}
+<div class="header">
+  <app-logo-with-title
+    title="{{ getBoardState().gameName }}"
+  ></app-logo-with-title>
+</div>
 
+<div class="page-container">
   <app-board
+    *ngIf="isConnected"
     [board]="getBoardState().getCurrentState()"
     (resetChoices)="resetChoices()"
     (revealUserChoices)="revealUserChoices()"
   ></app-board>
+  <div *ngIf="!isConnected">Connecting...</div>
+</div>
+
+<div class="footer">
   <app-user-hand
     *ngIf="!getBoardState().areUserChoicesRevealed"
     [choice]="getCurrentUserChoice()"
@@ -15,8 +24,4 @@
     *ngIf="getBoardState().areUserChoicesRevealed"
     [board]="getBoardState().getCurrentState()"
   ></app-voting-result>
-
-  <button class="btn btn-primary" (click)="goBackToLobby()">Go back</button>
 </div>
-
-<div class="container" *ngIf="!isConnected">Connecting...</div>

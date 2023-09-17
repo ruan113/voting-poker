@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { MaterialModule } from './material.module';
 import { BoardComponent } from './shared-room/board/board.component';
+import { UserCardListComponent } from './shared-room/board/user-card-list/user-card-list.component';
 import { SharedRoomComponent } from './shared-room/shared-room.component';
 import { UserHandComponent } from './shared-room/user-hand/user-hand.component';
 import { VotingResultComponent } from './shared-room/voting-result/voting-result.component';
@@ -23,6 +24,7 @@ import { VotingResultComponent } from './shared-room/voting-result/voting-result
     UserHandComponent,
     VotingResultComponent,
     LogoWithTitleComponent,
+    UserCardListComponent,
   ],
   imports: [
     BrowserModule,

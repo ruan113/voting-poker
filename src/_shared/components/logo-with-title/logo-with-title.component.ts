@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-logo-with-title',
@@ -7,4 +8,13 @@ import { Component, Input } from '@angular/core';
 })
 export class LogoWithTitleComponent {
   @Input() title: string = 'Title not specified for this page';
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
+
+  goBackToLobby() {
+    this.router.navigate([''], { relativeTo: this.route });
+  }
 }

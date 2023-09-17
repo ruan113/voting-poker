@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { BoardUser } from 'src/_shared/types/board-game-types';
 import { BoardState } from 'src/_shared/types/events';
 
 @Component({
@@ -21,4 +22,27 @@ export class BoardComponent {
   handleRevealUserChoices() {
     this.revealUserChoices.emit();
   }
+
+  getUserList(): GetUserListResult {
+    const keys = ['upper', 'bottom'];
+    const result: GetUserListResult = {
+      upper: [],
+      bottom: [],
+    };
+
+    if (this.board.users.length === 0) {
+      return result;
+    }
+
+    this.board.users.forEach((it, index) => {
+      result[keys[index % 2]].push(it);
+    });
+
+    return result;
+  }
 }
+
+type GetUserListResult = {
+  upper: BoardUser[];
+  bottom: BoardUser[];
+};

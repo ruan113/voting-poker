@@ -1,0 +1,13 @@
+<div class="container">
+  <div *ngFor="let user of users" class="card-container">
+    <div
+      class="card-body"
+      [ngClass]="{ chosen: user.choice !== undefined && user.choice !== null }"
+    >
+      <span class="unselectable" *ngIf="areUserChoicesRevealed">{{
+        user.choice
+      }}</span>
+    </div>
+    <span class="unselectable">{{ user.name }}</span>
+  </div>
+</div>

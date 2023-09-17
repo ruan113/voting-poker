@@ -19,6 +19,10 @@ export class Board {
     return this._votingSystem;
   }
 
+  get gameName(): string {
+    return this._gameName;
+  }
+
   getUsers(): BoardUser[] {
     return this._users;
   }
@@ -30,11 +34,11 @@ export class Board {
     this._areUserChoicesRevealed = false;
   }
 
-  revealUserChoices() {
+  revealUserChoices(): void {
     this._areUserChoicesRevealed = true;
   }
 
-  setUserChoice(userPeerId: string, newChoice?: string) {
+  setUserChoice(userPeerId: string, newChoice?: string): void {
     const userIndex = boardState
       .getUsers()
       .findIndex((it) => it.peerId === userPeerId);
@@ -51,12 +55,17 @@ export class Board {
     };
   }
 
+  updateBoardState(newState: BoardState): void {
+    this._areUserChoicesRevealed = newState.areUserChoicesRevealed;
+    this._users = newState.users;
+  }
+
   getUserChoice(userPeerId: string): string | undefined {
     const user = boardState.getUsers().find((it) => it.peerId === userPeerId);
     return user?.choice;
   }
 
-  addUserIntoBoard(user: BoardUser) {
+  addUserIntoBoard(user: BoardUser): void {
     const playerAlreadyAdded = this._users.find(
       (it) => it.peerId === user.peerId,
     );

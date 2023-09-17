@@ -47,17 +47,11 @@ export class HostService implements UserService {
 
       conn.on('open', () => {
         this.clientConnections.push(conn);
-
-        const playerAlreadyAdded = boardState.users.find(
-          (it) => it.peerId === conn.peer,
-        );
-        if (!playerAlreadyAdded)
-          boardState.users.push({
-            name: conn.peer.slice(0, 5),
-            peerId: conn.peer,
-            choice: undefined,
-          });
-
+        boardState.addUserIntoBoard({
+          name: conn.peer.slice(0, 5),
+          peerId: conn.peer,
+          choice: undefined,
+        });
         this.broadcastChangesToPeers();
       });
 
@@ -114,9 +108,6 @@ export class HostService implements UserService {
   }
 
   getUserCurrentChoice(): string | undefined {
-    const user = boardState
-      .getUsers()
-      .find((it) => it.peerId === this.rtcService.myId);
-    return user?.choice;
+    return boardState.getUserChoice(this.rtcService.myId);
   }
 }

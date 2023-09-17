@@ -34,7 +34,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 20px;
+  margin: 0 10px;
 }
 
 .d-flex {
@@ -43,6 +43,10 @@
 
 .m-auto {
   margin: auto;
+}
+
+.mt-1 {
+  margin-top: 10px;
 }
 
 html,

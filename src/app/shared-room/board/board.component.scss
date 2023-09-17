@@ -1,8 +1,20 @@
-.board {
+.board-center {
   display: flex;
   border: 1px solid black;
   border-radius: 8px;
   padding: 20px;
   width: fit-content;
   margin: 20px;
+}
+
+.page-container {
+  height: calc(100% - 75px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.middle-board-container {
+  display: flex;
+  justify-content: center;
 }

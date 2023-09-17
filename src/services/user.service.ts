@@ -1,9 +1,6 @@
-import { BoardState } from 'src/_shared/events';
-
 export abstract class UserService {
-  abstract getUserCurrentChoice(): number | undefined;
-  abstract submitChoice(newChoice?: number): void;
-  abstract getBoardState(): BoardState;
+  abstract getUserCurrentChoice(): string | undefined;
+  abstract submitChoice(newChoice?: string): void;
   abstract resetChoices(): void;
   abstract revealUserChoices(): void;
 }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { BoardState } from 'src/_shared/events';
+import { BoardState } from 'src/_shared/types/events';
 
 @Component({
   selector: 'app-board',

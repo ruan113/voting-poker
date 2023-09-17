@@ -1,9 +1,9 @@
-import { BoardUser } from './types/board-game-types';
-import { Event } from './types/event-types';
+import { BoardUser } from './board-game-types';
+import { Event } from './event-types';
 
 export type ChoiceConfirmed = Event<
   'ChoiceConfirmed',
-  { newChoice: number | undefined; peerId: string }
+  { newChoice: string | undefined; peerId: string }
 >;
 
 export type BoardReseted = Event<'BoardReseted', {}>;

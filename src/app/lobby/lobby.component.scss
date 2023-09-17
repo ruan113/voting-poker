@@ -1,0 +1,13 @@
+.page-container {
+  height: calc(100% - 75px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.center-container {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+  margin-bottom: 15%;
+}

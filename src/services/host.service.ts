@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import Peer, { DataConnection } from 'peerjs';
+import { boardState } from 'src/_shared/board';
+import { EventListenerContainer } from 'src/_shared/types/event-types';
 import {
   AllEvents,
   BoardReseted,
-  BoardState,
   ChoiceConfirmed,
   UpdateBoardState,
   UserChoicesRevealed,
-} from 'src/_shared/events';
-import { EventListenerContainer } from 'src/_shared/types/event-types';
+} from 'src/_shared/types/events';
 import { RTCService } from './rtc.service';
 import { UserService } from './user.service';
 
@@ -16,32 +16,18 @@ import { UserService } from './user.service';
   providedIn: 'root',
 })
 export class HostService implements UserService {
-  boardState: BoardState = {
-    users: [],
-    areUserChoicesRevealed: false,
-  };
-
   listeners: EventListenerContainer<AllEvents> = {
     ChoiceConfirmed: (data: unknown) => {
       const event = data as ChoiceConfirmed;
-      const userIndex = this.boardState.users.findIndex(
-        (it) => it.peerId === event.data.peerId,
-      );
-
-      if (userIndex === -1) return;
-
-      this.boardState.users[userIndex].choice = event.data.newChoice;
+      boardState.setUserChoice(event.data.peerId, event.data.newChoice);
       this.broadcastChangesToPeers();
     },
     BoardReseted: (_: unknown) => {
-      for (const user of this.boardState.users) {
-        user.choice = undefined;
-      }
-      this.boardState.areUserChoicesRevealed = false;
+      boardState.initializeNewRound();
       this.broadcastChangesToPeers();
     },
     UserChoicesRevealed: (_: unknown) => {
-      this.boardState.areUserChoicesRevealed = true;
+      boardState.revealUserChoices();
       this.broadcastChangesToPeers();
     },
   };
@@ -51,7 +37,7 @@ export class HostService implements UserService {
   constructor(private readonly rtcService: RTCService) {}
 
   setup(peer: Peer) {
-    this.boardState.users.push({
+    boardState.addUserIntoBoard({
       name: this.rtcService.myId.slice(0, 5),
       peerId: this.rtcService.myId,
       choice: undefined,
@@ -62,11 +48,11 @@ export class HostService implements UserService {
       conn.on('open', () => {
         this.clientConnections.push(conn);
 
-        const playerAlreadyAdded = this.boardState.users.find(
+        const playerAlreadyAdded = boardState.users.find(
           (it) => it.peerId === conn.peer,
         );
         if (!playerAlreadyAdded)
-          this.boardState.users.push({
+          boardState.users.push({
             name: conn.peer.slice(0, 5),
             peerId: conn.peer,
             choice: undefined,
@@ -87,14 +73,14 @@ export class HostService implements UserService {
   async broadcastChangesToPeers(): Promise<void> {
     const event: UpdateBoardState = {
       type: 'UpdateBoardState',
-      data: this.boardState,
+      data: boardState.getCurrentState(),
     };
     for (const peerConn of this.clientConnections) {
       peerConn.send(event);
     }
   }
 
-  submitChoice(newChoice?: number): void {
+  submitChoice(newChoice?: string): void {
     const event: ChoiceConfirmed = {
       type: 'ChoiceConfirmed',
       data: {
@@ -105,10 +91,6 @@ export class HostService implements UserService {
     const handleFn = this.listeners[event.type];
     if (!handleFn) return;
     handleFn(event);
-  }
-
-  getBoardState(): BoardState {
-    return this.boardState;
   }
 
   resetChoices(): void {
@@ -131,10 +113,10 @@ export class HostService implements UserService {
     handleFn(event);
   }
 
-  getUserCurrentChoice(): number | undefined {
-    const user = this.boardState.users.find(
-      (it) => it.peerId === this.rtcService.myId,
-    );
+  getUserCurrentChoice(): string | undefined {
+    const user = boardState
+      .getUsers()
+      .find((it) => it.peerId === this.rtcService.myId);
     return user?.choice;
   }
 }

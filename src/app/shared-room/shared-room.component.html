@@ -2,18 +2,18 @@
   Shared Room from {{ peerIdFromRoute }}
 
   <app-board
-    [board]="getBoardState()"
+    [board]="getBoardState().getCurrentState()"
     (resetChoices)="resetChoices()"
     (revealUserChoices)="revealUserChoices()"
   ></app-board>
   <app-user-hand
     *ngIf="!getBoardState().areUserChoicesRevealed"
-    [choice]="userService?.getUserCurrentChoice() ?? undefined"
+    [choice]="getCurrentUserChoice()"
     (choiceChanged)="setChoice($event)"
   ></app-user-hand>
   <app-voting-result
     *ngIf="getBoardState().areUserChoicesRevealed"
-    [board]="getBoardState()"
+    [board]="getBoardState().getCurrentState()"
   ></app-voting-result>
 
   <button class="btn btn-primary" (click)="goBackToLobby()">Go back</button>

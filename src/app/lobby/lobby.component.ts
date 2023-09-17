@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import {
+  VotingSystemOption,
+  votingSystemValues,
+} from 'src/_shared/types/board-game-types';
 import { RTCService } from 'src/services/rtc.service';
 
 @Component({
@@ -8,7 +13,11 @@ import { RTCService } from 'src/services/rtc.service';
   styleUrls: ['./lobby.component.scss'],
 })
 export class LobbyComponent {
-  activeScreen: 'Lobby' | 'ConnectToRoom' = 'Lobby';
+  votingSystemOptions: VotingSystemOption[] = votingSystemValues;
+  votingSystemControl = new FormControl<string>(
+    this.votingSystemOptions[0].key,
+    Validators.nullValidator,
+  );
 
   constructor(
     private route: ActivatedRoute,
@@ -20,9 +29,5 @@ export class LobbyComponent {
     this.router.navigate(['shared-room', `${this.rtcService.myId}`], {
       relativeTo: this.route,
     });
-  }
-
-  goToConnectToRoomScreen() {
-    this.activeScreen = 'ConnectToRoom';
   }
 }

@@ -1,12 +1,12 @@
 import { DataConnection } from 'peerjs';
+import { EventListenerContainer } from 'src/_shared/types/event-types';
 import {
   BoardReseted,
   BoardState,
   ChoiceConfirmed,
   UpdateBoardState,
   UserChoicesRevealed,
-} from 'src/_shared/events';
-import { EventListenerContainer } from 'src/_shared/types/event-types';
+} from 'src/_shared/types/events';
 import { UserService } from './user.service';
 
 export class ClientService implements UserService {

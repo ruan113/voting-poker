@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { BoardState, getBoardInitialState } from 'src/_shared/events';
+import { Board, boardState } from 'src/_shared/board';
 import { BoardUser } from 'src/_shared/types/board-game-types';
 import { RTCService } from 'src/services/rtc.service';
 import { UserService } from 'src/services/user.service';
@@ -46,20 +46,18 @@ export class SharedRoomComponent {
     });
   }
 
-  setChoice(newChoice?: number) {
+  setChoice(newChoice?: string) {
     if (!this.getBoardState().areUserChoicesRevealed) {
       this.userService?.submitChoice(newChoice);
     }
   }
 
-  getBoardState(): BoardState {
-    return this.userService?.getBoardState() ?? getBoardInitialState();
+  getBoardState(): Board {
+    return boardState;
   }
 
-  getCurrentUserChoice(): number | undefined {
-    return this.userService
-      ?.getBoardState()
-      .users.find((it) => it.peerId === this.rtcService.myId)?.choice;
+  getCurrentUserChoice(): string | undefined {
+    return this.getBoardState().getUserChoice(this.rtcService.myId);
   }
 
   goBackToLobby() {

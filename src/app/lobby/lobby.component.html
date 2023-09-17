@@ -1,8 +1,37 @@
-<app-connect-to-room
+<!-- <app-connect-to-room
   *ngIf="activeScreen === 'ConnectToRoom'"
 ></app-connect-to-room>
 
 <div *ngIf="activeScreen === 'Lobby'">
   <button (click)="goToSharedRoom()">Criar sala</button>
   <button (click)="goToConnectToRoomScreen()">Conectar a sala</button>
+</div> -->
+
+<div class="header">
+  <app-logo-with-title title="Create game"></app-logo-with-title>
+</div>
+
+<div class="page-container">
+  <div class="center-container">
+    <mat-form-field appearance="outline">
+      <mat-label>Game's name</mat-label>
+      <input matInput placeholder="Placeholder" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Voting system</mat-label>
+      <mat-select [formControl]="votingSystemControl">
+        <mat-option
+          *ngFor="let option of votingSystemOptions"
+          [value]="option.key"
+        >
+          {{ option.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" (click)="goToSharedRoom()">
+      Create game
+    </button>
+  </div>
 </div>

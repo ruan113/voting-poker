@@ -1,23 +1,30 @@
-<div class="board">
-  <div *ngFor="let user of board.users" class="card-container">
-    <div
-      class="card-body"
-      [ngClass]="{ chosen: user.choice !== undefined && user.choice !== null }"
-    >
-      <span class="unselectable" *ngIf="board.areUserChoicesRevealed">{{
-        user.choice
-      }}</span>
-    </div>
-    <span class="unselectable">{{ user.name }}</span>
+<div class="container">
+  <div class="upper-board-container">
+    <app-user-card-list
+      [users]="getUserList().upper"
+      [areUserChoicesRevealed]="board.areUserChoicesRevealed"
+    ></app-user-card-list>
   </div>
-
-  <button *ngIf="board.areUserChoicesRevealed" (click)="handleResetChoices()">
-    Iniciar nova
-  </button>
-  <button
-    *ngIf="!board.areUserChoicesRevealed"
-    (click)="handleRevealUserChoices()"
-  >
-    Revelar
-  </button>
+  <div class="middle-board-container">
+    <div class="board-center">
+      <button
+        *ngIf="board.areUserChoicesRevealed"
+        (click)="handleResetChoices()"
+      >
+        Iniciar nova
+      </button>
+      <button
+        *ngIf="!board.areUserChoicesRevealed"
+        (click)="handleRevealUserChoices()"
+      >
+        Revelar
+      </button>
+    </div>
+  </div>
+  <div class="bottom-board-container">
+    <app-user-card-list
+      [users]="getUserList().bottom"
+      [areUserChoicesRevealed]="board.areUserChoicesRevealed"
+    ></app-user-card-list>
+  </div>
 </div>

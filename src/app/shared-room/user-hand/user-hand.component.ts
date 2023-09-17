@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { boardState } from 'src/_shared/board';
 
 @Component({
   selector: 'app-user-hand',
@@ -6,12 +7,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./user-hand.component.scss'],
 })
 export class UserHandComponent {
-  options = [0.5, 1, 2, 3, 5, 8];
+  options = boardState.votingSystem.cards;
 
-  @Input() choice: number | undefined = undefined;
-  @Output() choiceChanged = new EventEmitter<number | undefined>();
+  @Input() choice: string | undefined = undefined;
+  @Output() choiceChanged = new EventEmitter<string | undefined>();
 
-  setChoice(newChoice: number) {
+  setChoice(newChoice: string) {
     this.choiceChanged.emit(newChoice);
   }
 }

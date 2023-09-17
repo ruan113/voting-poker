@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Peer } from 'peerjs';
-import { waitUntil } from 'src/_shared/wait-until';
+import { waitUntil } from 'src/_shared/utils/wait-until';
 import { ClientService } from './client.service';
 import { HostService } from './host.service';
 import { UserService } from './user.service';

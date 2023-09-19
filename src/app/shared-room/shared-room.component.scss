@@ -11,3 +11,12 @@
   width: 100%;
   height: 100px;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  button {
+    margin-right: 20px;
+  }
+}

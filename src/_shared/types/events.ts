@@ -9,6 +9,10 @@ export type ChoiceConfirmed = Event<
 export type BoardReseted = Event<'BoardReseted', {}>;
 
 export type UserChoicesRevealed = Event<'UserChoicesRevealed', {}>;
+export type UserNameChanged = Event<
+  'UserNameChanged',
+  { peerId: string; newName: string }
+>;
 
 export function getBoardInitialState() {
   return {
@@ -24,4 +28,8 @@ export type BoardState = {
 
 export type UpdateBoardState = Event<'UpdateBoardState', BoardState>;
 
-export type AllEvents = ChoiceConfirmed | BoardReseted | UserChoicesRevealed;
+export type AllEvents =
+  | ChoiceConfirmed
+  | BoardReseted
+  | UserChoicesRevealed
+  | UserNameChanged;

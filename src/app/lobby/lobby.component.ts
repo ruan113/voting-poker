@@ -1,11 +1,14 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { boardState } from 'src/_shared/board';
 import {
   VotingSystemOption,
   votingSystemValues,
 } from 'src/_shared/types/board-game-types';
 import { RTCService } from 'src/services/rtc.service';
+
+const DEFAULT_VOTING_SYSTEM = votingSystemValues[0];
 
 @Component({
   selector: 'app-lobby',
@@ -18,6 +21,7 @@ export class LobbyComponent {
     this.votingSystemOptions[0].key,
     Validators.nullValidator,
   );
+  gameName?: string;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,6 +30,12 @@ export class LobbyComponent {
   ) {}
 
   goToSharedRoom() {
+    boardState.initializeNewBoard(
+      votingSystemValues.find(
+        (it) => it.key === this.votingSystemControl.value,
+      ) ?? DEFAULT_VOTING_SYSTEM,
+      this.gameName,
+    );
     this.router.navigate(['shared-room', `${this.rtcService.myId}`], {
       relativeTo: this.route,
     });

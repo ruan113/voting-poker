@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Board, boardState } from 'src/_shared/board';
 import { BoardUser } from 'src/_shared/types/board-game-types';
 import { RTCService } from 'src/services/rtc.service';
 import { UserService } from 'src/services/user.service';
+import { InputUserNameModalComponent } from './components/input-user-name-modal/input-user-name-modal.component';
 
 @Component({
   selector: 'app-shared-room',
@@ -22,6 +24,7 @@ export class SharedRoomComponent {
     private route: ActivatedRoute,
     private router: Router,
     private readonly rtcService: RTCService,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -38,11 +41,25 @@ export class SharedRoomComponent {
         .then((res) => {
           this.isConnected = true;
           this.userService = res;
+
+          this.openInputUserNameModal();
         })
         .catch((error) => {
           console.error(error);
           this.goBackToLobby();
         });
+    });
+  }
+
+  openInputUserNameModal(): void {
+    const dialogRef = this.dialog.open(InputUserNameModalComponent, {
+      data: undefined,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.userService?.setUserName(result);
+      }
     });
   }
 

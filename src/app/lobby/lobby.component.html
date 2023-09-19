@@ -15,7 +15,11 @@
   <div class="center-container">
     <mat-form-field appearance="outline">
       <mat-label>Game's name</mat-label>
-      <input matInput placeholder="Placeholder" />
+      <input
+        matInput
+        placeholder="Type a custom name for your game if you want..."
+        [(ngModel)]="gameName"
+      />
     </mat-form-field>
 
     <mat-form-field appearance="outline">

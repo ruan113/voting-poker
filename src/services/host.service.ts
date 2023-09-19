@@ -8,6 +8,7 @@ import {
   ChoiceConfirmed,
   UpdateBoardState,
   UserChoicesRevealed,
+  UserNameChanged,
 } from 'src/_shared/types/events';
 import { RTCService } from './rtc.service';
 import { UserService } from './user.service';
@@ -30,6 +31,11 @@ export class HostService implements UserService {
       boardState.revealUserChoices();
       this.broadcastChangesToPeers();
     },
+    UserNameChanged: (data: unknown) => {
+      const event = data as UserNameChanged;
+      boardState.setUserName(event.data.peerId, event.data.newName);
+      this.broadcastChangesToPeers();
+    },
   };
 
   clientConnections: DataConnection[] = [];
@@ -38,7 +44,6 @@ export class HostService implements UserService {
 
   setup(peer: Peer) {
     boardState.addUserIntoBoard({
-      name: this.rtcService.myId.slice(0, 5),
       peerId: this.rtcService.myId,
       choice: undefined,
     });
@@ -48,7 +53,6 @@ export class HostService implements UserService {
       conn.on('open', () => {
         this.clientConnections.push(conn);
         boardState.addUserIntoBoard({
-          name: conn.peer.slice(0, 5),
           peerId: conn.peer,
           choice: undefined,
         });
@@ -109,5 +113,18 @@ export class HostService implements UserService {
 
   getUserCurrentChoice(): string | undefined {
     return boardState.getUserChoice(this.rtcService.myId);
+  }
+
+  setUserName(newName: string): void {
+    const event: UserNameChanged = {
+      type: 'UserNameChanged',
+      data: {
+        newName,
+        peerId: this.rtcService.myId,
+      },
+    };
+    const handleFn = this.listeners[event.type];
+    if (!handleFn) return;
+    handleFn(event);
   }
 }

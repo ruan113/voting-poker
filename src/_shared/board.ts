@@ -5,11 +5,23 @@ import {
 } from './types/board-game-types';
 import { BoardState } from './types/events';
 
+const DEFAULT_GAME_NAME = 'Planning poker game';
+
 export class Board {
   private _votingSystem: VotingSystemOption = votingSystemValues[0];
-  private _gameName: string = 'Planning poker game';
+  private _gameName: string = DEFAULT_GAME_NAME;
   private _users: BoardUser[] = [];
   private _areUserChoicesRevealed = false;
+
+  initializeNewBoard(
+    votingSystem: VotingSystemOption,
+    gameName?: string,
+  ): void {
+    this._gameName = gameName ?? DEFAULT_GAME_NAME;
+    this._votingSystem = votingSystem;
+    this._users = [];
+    this._areUserChoicesRevealed = false;
+  }
 
   get areUserChoicesRevealed(): boolean {
     return this._areUserChoicesRevealed;
@@ -65,7 +77,16 @@ export class Board {
     return user?.choice;
   }
 
-  addUserIntoBoard(user: BoardUser): void {
+  setUserName(userPeerId: string, userName: string): void {
+    this._users = this._users.map((user) => {
+      if (user.peerId === userPeerId) {
+        user.name = userName;
+      }
+      return user;
+    });
+  }
+
+  addUserIntoBoard(user: Omit<BoardUser, 'name'> & { name?: string }): void {
     const playerAlreadyAdded = this._users.find(
       (it) => it.peerId === user.peerId,
     );
@@ -73,7 +94,17 @@ export class Board {
     if (playerAlreadyAdded) {
       return;
     }
-    this._users.push(user);
+    this._users.push({ ...user, name: user.name ?? this.getAnAnonymousName() });
+  }
+
+  private getAnAnonymousName() {
+    const availableNames = this._users.map((it) => it.name);
+    let i = 1;
+    let result = `Anonymous ${i}`;
+    while (availableNames.includes(result)) {
+      i++;
+    }
+    return result;
   }
 }
 

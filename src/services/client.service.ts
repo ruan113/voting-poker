@@ -6,6 +6,7 @@ import {
   ChoiceConfirmed,
   UpdateBoardState,
   UserChoicesRevealed,
+  UserNameChanged,
 } from 'src/_shared/types/events';
 import { UserService } from './user.service';
 
@@ -61,5 +62,17 @@ export class ClientService implements UserService {
 
   getUserCurrentChoice(): string | undefined {
     return boardState.getUserChoice(this.peerId);
+  }
+
+  setUserName(newName: string): void {
+    const event: UserNameChanged = {
+      type: 'UserNameChanged',
+      data: {
+        newName,
+        peerId: this.peerId,
+      },
+    };
+    boardState.setUserName(this.peerId, newName);
+    this.hostConnection.send(event);
   }
 }

@@ -35,7 +35,10 @@
     </mat-form-field>
 
     <button mat-flat-button color="primary" (click)="goToSharedRoom()">
-      Create game
+      <span *ngIf="!loading">Create game</span>
+      <div class="loading-icon" *ngIf="loading">
+        <mat-icon fontIcon="refresh"></mat-icon>
+      </div>
     </button>
   </div>
 </div>

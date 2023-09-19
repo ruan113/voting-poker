@@ -6,6 +6,7 @@ import {
   VotingSystemOption,
   votingSystemValues,
 } from 'src/_shared/types/board-game-types';
+import { waitUntil } from 'src/_shared/utils/wait-until';
 import { RTCService } from 'src/services/rtc.service';
 
 const DEFAULT_VOTING_SYSTEM = votingSystemValues[0];
@@ -22,6 +23,7 @@ export class LobbyComponent {
     Validators.nullValidator,
   );
   gameName?: string;
+  loading: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -29,15 +31,24 @@ export class LobbyComponent {
     private readonly rtcService: RTCService,
   ) {}
 
-  goToSharedRoom() {
-    boardState.initializeNewBoard(
-      votingSystemValues.find(
-        (it) => it.key === this.votingSystemControl.value,
-      ) ?? DEFAULT_VOTING_SYSTEM,
-      this.gameName,
-    );
-    this.router.navigate(['shared-room', `${this.rtcService.myId}`], {
-      relativeTo: this.route,
-    });
+  async goToSharedRoom(): Promise<void> {
+    this.loading = true;
+    try {
+      boardState.initializeNewBoard(
+        votingSystemValues.find(
+          (it) => it.key === this.votingSystemControl.value,
+        ) ?? DEFAULT_VOTING_SYSTEM,
+        this.gameName,
+      );
+
+      await waitUntil(() => this.rtcService.myId !== '', true);
+
+      this.router.navigate(['shared-room', `${this.rtcService.myId}`], {
+        relativeTo: this.route,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    this.loading = false;
   }
 }

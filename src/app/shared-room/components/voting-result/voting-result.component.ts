@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { BoardState, getBoardInitialState } from 'src/_shared/types/events';
+import { BoardState } from 'src/_shared/types/board-game-types';
+import { getBoardInitialState } from 'src/_shared/types/events';
 
 @Component({
   selector: 'app-voting-result',

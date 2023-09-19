@@ -4,6 +4,9 @@
       class="card-body"
       [ngClass]="{ chosen: user.choice !== undefined && user.choice !== null }"
     >
+      <div class="away-icon-container" *ngIf="user.state === 'Away'">
+        <mat-icon fontIcon="hotel"></mat-icon>
+      </div>
       <span class="unselectable" *ngIf="areUserChoicesRevealed">{{
         user.choice
       }}</span>

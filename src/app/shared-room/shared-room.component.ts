@@ -51,6 +51,10 @@ export class SharedRoomComponent {
     });
   }
 
+  ngOnDestroy() {
+    this.userService?.disconnectUser();
+  }
+
   openInputUserNameModal(): void {
     const dialogRef = this.dialog.open(InputUserNameModalComponent, {
       data: undefined,

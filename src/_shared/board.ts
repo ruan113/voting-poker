@@ -1,11 +1,14 @@
 import {
+  BoardState,
   BoardUser,
+  UserState,
   VotingSystemOption,
   votingSystemValues,
 } from './types/board-game-types';
-import { BoardState } from './types/events';
+import { getBoardInitialState } from './types/events';
 
 const DEFAULT_GAME_NAME = 'Planning poker game';
+const DEFAULT_VOTING_SYSTEM = votingSystemValues[0];
 
 export class Board {
   private _votingSystem: VotingSystemOption = votingSystemValues[0];
@@ -14,13 +17,12 @@ export class Board {
   private _areUserChoicesRevealed = false;
 
   initializeNewBoard(
-    votingSystem: VotingSystemOption,
+    votingSystem?: VotingSystemOption,
     gameName?: string,
   ): void {
     this._gameName = gameName ?? DEFAULT_GAME_NAME;
-    this._votingSystem = votingSystem;
-    this._users = [];
-    this._areUserChoicesRevealed = false;
+    this._votingSystem = votingSystem ?? DEFAULT_VOTING_SYSTEM;
+    this.updateBoardState(getBoardInitialState());
   }
 
   get areUserChoicesRevealed(): boolean {
@@ -86,24 +88,48 @@ export class Board {
     });
   }
 
-  addUserIntoBoard(user: Omit<BoardUser, 'name'> & { name?: string }): void {
+  setUserState(userPeerId: string, state: UserState): void {
+    this._users = this._users.map((user) => {
+      if (user.peerId === userPeerId) {
+        user.state = state;
+      }
+      return user;
+    });
+  }
+
+  addUserIntoBoard(userPeerId: string): void {
     const playerAlreadyAdded = this._users.find(
-      (it) => it.peerId === user.peerId,
+      (it) => it.peerId === userPeerId,
     );
 
     if (playerAlreadyAdded) {
       return;
     }
-    this._users.push({ ...user, name: user.name ?? this.getAnAnonymousName() });
+    this._users.push({
+      peerId: userPeerId,
+      name: this.getAnAnonymousName(),
+      state: 'Connected',
+    });
+  }
+
+  removeUserFromBoard(userPeerId): void {
+    const userIndex = this._users.findIndex((it) => it.peerId === userPeerId);
+
+    if (userIndex === -1) return;
+
+    this._users.splice(userIndex, 1);
   }
 
   private getAnAnonymousName() {
     const availableNames = this._users.map((it) => it.name);
     let i = 1;
-    let result = `Anonymous ${i}`;
-    while (availableNames.includes(result)) {
+    let nameAlreadyExists = true;
+    let result;
+    do {
+      result = `Anonymous ${i}`;
+      nameAlreadyExists = availableNames.includes(result);
       i++;
-    }
+    } while (nameAlreadyExists);
     return result;
   }
 }

@@ -1,4 +1,9 @@
-export type BoardUser = { peerId: string; name: string; choice?: string };
+export type BoardUser = {
+  peerId: string;
+  name: string;
+  choice?: string;
+  state: UserState;
+};
 
 export type VotingSystemOption = { name: string; key: string; cards: string[] };
 
@@ -23,3 +28,10 @@ export const votingSystemValues: VotingSystemOption[] = [
     ],
   },
 ];
+
+export type BoardState = {
+  users: BoardUser[];
+  areUserChoicesRevealed: boolean;
+};
+
+export type UserState = 'Connected' | 'Away';

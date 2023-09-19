@@ -31,7 +31,7 @@ export class RTCService {
     });
   }
 
-  get myId() {
+  get myId(): string {
     return this._myId;
   }
 

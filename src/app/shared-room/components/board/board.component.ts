@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { BoardUser } from 'src/_shared/types/board-game-types';
-import { BoardState } from 'src/_shared/types/events';
+import { BoardState, BoardUser } from 'src/_shared/types/board-game-types';
+import { getBoardInitialState } from 'src/_shared/types/events';
 
 @Component({
   selector: 'app-board',
@@ -8,10 +8,7 @@ import { BoardState } from 'src/_shared/types/events';
   styleUrls: ['./board.component.scss'],
 })
 export class BoardComponent {
-  @Input() board: BoardState = {
-    users: [],
-    areUserChoicesRevealed: false,
-  };
+  @Input() board: BoardState = getBoardInitialState();
 
   @Output() resetChoices = new EventEmitter<void>();
   @Output() revealUserChoices = new EventEmitter<void>();

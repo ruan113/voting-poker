@@ -1,4 +1,4 @@
-import { BoardUser } from './board-game-types';
+import { BoardState } from './board-game-types';
 import { Event } from './event-types';
 
 export type ChoiceConfirmed = Event<
@@ -9,27 +9,32 @@ export type ChoiceConfirmed = Event<
 export type BoardReseted = Event<'BoardReseted', {}>;
 
 export type UserChoicesRevealed = Event<'UserChoicesRevealed', {}>;
+
 export type UserNameChanged = Event<
   'UserNameChanged',
   { peerId: string; newName: string }
 >;
 
-export function getBoardInitialState() {
+export type UserDisconnected = Event<'UserDisconnected', { peerId: string }>;
+
+export type PingEmitted = Event<'PingEmitted', {}>;
+export type PingRecognized = Event<'PingRecognized', { peerId: string }>;
+
+export function getBoardInitialState(): BoardState {
   return {
     users: [],
     areUserChoicesRevealed: false,
   };
 }
 
-export type BoardState = {
-  users: BoardUser[];
-  areUserChoicesRevealed: boolean;
-};
+export type BoardStateUpdated = Event<'BoardStateUpdated', BoardState>;
 
-export type UpdateBoardState = Event<'UpdateBoardState', BoardState>;
-
-export type AllEvents =
+export type HostEvents =
   | ChoiceConfirmed
   | BoardReseted
   | UserChoicesRevealed
-  | UserNameChanged;
+  | UserNameChanged
+  | UserDisconnected
+  | PingRecognized;
+
+export type ClientEvents = BoardStateUpdated | PingEmitted;

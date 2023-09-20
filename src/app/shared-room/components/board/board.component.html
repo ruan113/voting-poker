@@ -7,18 +7,31 @@
   </div>
   <div class="middle-board-container">
     <div class="board-center">
-      <button
-        *ngIf="board.areUserChoicesRevealed"
-        (click)="handleResetChoices()"
+      <span
+        class="f-bold"
+        *ngIf="!didSomeoneChooseACard"
+        style="color: #3f51b5"
       >
-        Iniciar nova
-      </button>
-      <button
-        *ngIf="!board.areUserChoicesRevealed"
-        (click)="handleRevealUserChoices()"
-      >
-        Revelar
-      </button>
+        Pick your cards!
+      </span>
+      <ng-container *ngIf="didSomeoneChooseACard">
+        <button
+          mat-flat-button
+          color="primary"
+          *ngIf="board.areUserChoicesRevealed"
+          (click)="handleResetChoices()"
+        >
+          Start new voting
+        </button>
+        <button
+          mat-flat-button
+          color="primary"
+          *ngIf="!board.areUserChoicesRevealed"
+          (click)="handleRevealUserChoices()"
+        >
+          Reveal cards
+        </button>
+      </ng-container>
     </div>
   </div>
   <div class="bottom-board-container">

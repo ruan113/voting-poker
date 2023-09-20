@@ -1,5 +1,9 @@
 <div class="container">
-  <div *ngFor="let option of options" class="card-container">
+  <div
+    *ngFor="let option of options"
+    class="card-container"
+    [ngStyle]="choice === option ? { 'justify-content': 'start' } : {}"
+  >
     <div
       class="card-body clickable"
       [ngClass]="{ chosen: choice === option }"

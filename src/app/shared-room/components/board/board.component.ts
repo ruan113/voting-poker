@@ -37,6 +37,10 @@ export class BoardComponent {
 
     return result;
   }
+
+  get didSomeoneChooseACard(): Boolean {
+    return this.board.users.some((it) => Boolean(it.choice));
+  }
 }
 
 type GetUserListResult = {

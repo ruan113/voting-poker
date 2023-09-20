@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Board, boardState } from 'src/_shared/board';
 import { BoardUser } from 'src/_shared/types/board-game-types';
+import { waitUntil } from 'src/_shared/utils/wait-until';
 import { RTCService } from 'src/services/rtc.service';
 import { UserService } from 'src/services/user.service';
 import { InputUserNameModalComponent } from './components/input-user-name-modal/input-user-name-modal.component';
@@ -15,6 +16,7 @@ import { InputUserNameModalComponent } from './components/input-user-name-modal/
 export class SharedRoomComponent {
   peerIdFromRoute: string = '';
   isConnected = false;
+  showTakingTooLongMessage = false;
 
   users: BoardUser[] = [];
 
@@ -47,6 +49,12 @@ export class SharedRoomComponent {
         .catch((error) => {
           console.error(error);
           this.goBackToLobby();
+        });
+
+      waitUntil(() => this.isConnected, true)
+        .then()
+        .catch(() => {
+          this.showTakingTooLongMessage = true;
         });
     });
   }

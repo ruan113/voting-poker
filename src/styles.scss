@@ -70,6 +70,7 @@ body {
 .loading-icon {
   display: flex;
   height: fit-content;
+  width: fit-content;
   transform: translate(0%, 0%);
   -webkit-animation: loading 1.5s linear infinite; /* Chrome, Safari, Opera */
   animation: loading 1.5s linear infinite;

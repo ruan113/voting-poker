@@ -2,6 +2,8 @@ import { Component, Input } from '@angular/core';
 import { BoardState } from 'src/_shared/types/board-game-types';
 import { getBoardInitialState } from 'src/_shared/types/events';
 
+type CardrStatistics = { value: unknown; chosenCount: number };
+
 @Component({
   selector: 'app-voting-result',
   templateUrl: './voting-result.component.html',
@@ -11,7 +13,7 @@ export class VotingResultComponent {
   @Input() board: BoardState = getBoardInitialState();
 
   result: {
-    cards: { value: number; chosenCount: number }[];
+    cards: CardrStatistics[];
     avg: number;
   } = {
     avg: 0,
@@ -23,7 +25,7 @@ export class VotingResultComponent {
   }
 
   getProcessedResults(): {
-    cards: { value: number; chosenCount: number }[];
+    cards: CardrStatistics[];
     avg: number;
   } {
     const votingCountMap = this.board.users
@@ -36,21 +38,23 @@ export class VotingResultComponent {
         return acc;
       }, {});
 
-    const avgParams = Object.keys(votingCountMap).reduce(
-      (acc, key) => {
-        acc.sum = Number(key) * votingCountMap[key];
-        acc.total += votingCountMap[key];
-        return acc;
-      },
-      { total: 0, sum: 0 },
-    );
+    const avgParams = Object.keys(votingCountMap)
+      .filter((key) => !isNaN(Number(key)))
+      .reduce(
+        (acc, key) => {
+          acc.sum = Number(key) * votingCountMap[key];
+          acc.total += votingCountMap[key];
+          return acc;
+        },
+        { total: 0, sum: 0 },
+      );
     const avg = avgParams.total ? avgParams.sum / avgParams.total : 0;
     return {
       avg,
       cards: Object.keys(votingCountMap).map(
-        (key): { value: number; chosenCount: number } => ({
+        (key): CardrStatistics => ({
           chosenCount: votingCountMap[key],
-          value: Number(key),
+          value: key,
         }),
       ),
     };

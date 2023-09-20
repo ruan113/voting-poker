@@ -13,6 +13,10 @@ export class UserHandComponent {
   @Output() choiceChanged = new EventEmitter<string | undefined>();
 
   setChoice(newChoice: string) {
-    this.choiceChanged.emit(newChoice);
+    if (newChoice === this.choice) {
+      this.choiceChanged.emit(undefined);
+    } else {
+      this.choiceChanged.emit(newChoice);
+    }
   }
 }

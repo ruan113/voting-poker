@@ -2,7 +2,12 @@
   <app-logo-with-title
     title="{{ getBoardState().gameName }}"
   ></app-logo-with-title>
-  <button mat-flat-button color="primary" (click)="openInputUserNameModal()">
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="openInputUserNameModal()"
+    *ngIf="isConnected"
+  >
     Change user name
   </button>
 </div>
@@ -14,10 +19,26 @@
     (resetChoices)="resetChoices()"
     (revealUserChoices)="revealUserChoices()"
   ></app-board>
-  <div *ngIf="!isConnected">Connecting...</div>
+  <div *ngIf="!isConnected">
+    <div class="connecting-message-container">
+      <div class="loading-icon">
+        <mat-icon fontIcon="refresh"></mat-icon>
+      </div>
+      <span> Connecting... </span>
+    </div>
+    <div class="taking-too-long-container" *ngIf="showTakingTooLongMessage">
+      <h3>
+        It is taking too long to connect to the specified room, are you sure
+        this room exists or if it wasn't closed by it's owner?
+      </h3>
+      <button mat-flat-button color="primary" (click)="goBackToLobby()">
+        Go to home page
+      </button>
+    </div>
+  </div>
 </div>
 
-<div class="footer">
+<div class="footer" *ngIf="isConnected">
   <app-user-hand
     *ngIf="!getBoardState().areUserChoicesRevealed"
     [choice]="getCurrentUserChoice()"

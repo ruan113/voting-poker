@@ -20,3 +20,25 @@
     margin-right: 20px;
   }
 }
+
+.connecting-message-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.taking-too-long-container {
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  width: 50%;
+  min-width: 298px;
+  h3 {
+    text-align: center;
+  }
+}

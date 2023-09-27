@@ -148,7 +148,7 @@ export class HostService implements UserService {
         const index = this.clientConnections.findIndex(
           (it) => it.peer === conn.peer,
         );
-        if (index !== -1) return;
+        if (index === -1) return;
         this.clientConnections[index].lastEventAt = new Date();
       });
 

@@ -17,6 +17,8 @@ import { addSecondsToDate } from 'src/_shared/utils/add-seconds-to-date';
 import { RTCService } from './rtc.service';
 import { UserService } from './user.service';
 
+const TIME_TO_CONSIDER_AWAY = 20;
+
 type ClientConnection = DataConnection & { lastEventAt?: Date };
 
 @Injectable({
@@ -48,13 +50,21 @@ export class HostService implements UserService {
     },
     PingRecognized: (data: unknown) => {
       const event = data as PingRecognized;
-      this.clientConnections = this.clientConnections.map((it) => {
-        if (it.peer === event.data.peerId) {
-          console.log(`ping recognized by ${it.peer}`);
-          it.lastEventAt = new Date();
-        }
-        return it;
-      });
+      const index = this.clientConnections.findIndex(
+        (it) => it.peer === event.data.peerId,
+      );
+
+      if (index !== -1) {
+        this.clientConnections[index].lastEventAt = new Date();
+        boardState.setUserState(
+          this.clientConnections[index].peer,
+          'Connected',
+        );
+        this.sendBoardStateForAllClients();
+        console.log(
+          `${this.clientConnections[index].peer} reconized at: ${this.clientConnections[index].lastEventAt}`,
+        );
+      }
     },
   };
 
@@ -89,9 +99,8 @@ export class HostService implements UserService {
     );
     const lastEventHappenedWithinTenSeconds =
       lastEventTimePlusTenSeconds.getTime() > new Date().getTime();
-    if (lastEventHappenedWithinTenSeconds) {
-      return;
-    }
+    if (lastEventHappenedWithinTenSeconds) return;
+
     console.log('ping emitted');
     client.send(pingEmittedEvent);
   }
@@ -100,9 +109,7 @@ export class HostService implements UserService {
     client: ClientConnection,
     seconds: number,
   ) {
-    if (!client || !client.lastEventAt) {
-      return;
-    }
+    if (!client || !client.lastEventAt) return;
 
     const lastEventTimePlusTimeToBeDisconnected = addSecondsToDate(
       client.lastEventAt,
@@ -119,7 +126,8 @@ export class HostService implements UserService {
     if (!client || !client.lastEventAt) return;
 
     if (
-      addSecondsToDate(client.lastEventAt, 10).getTime() < new Date().getTime()
+      new Date().getTime() >
+      addSecondsToDate(client.lastEventAt, TIME_TO_CONSIDER_AWAY).getTime()
     ) {
       boardState.setUserState(client.peer, 'Away');
       this.sendBoardStateForAllClients();

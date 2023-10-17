@@ -42,7 +42,7 @@ export class VotingResultComponent {
       .filter((key) => !isNaN(Number(key)))
       .reduce(
         (acc, key) => {
-          acc.sum = Number(key) * votingCountMap[key];
+          acc.sum += Number(key) * votingCountMap[key];
           acc.total += votingCountMap[key];
           return acc;
         },

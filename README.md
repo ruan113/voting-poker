@@ -1,27 +1,18 @@
-# VotingPoker
+# Serverless Angular Voting Poker
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.1.
+This project is hosted in git pages. To access it, use this link: https://ruan113.github.io/voting-poker/
 
-## Development server
+The purpose of this application is to streamline the process of estimating tasks or items in a collaborative team environment using the popular planning poker technique.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+# How to use it
 
-## Code scaffolding
+- If you are the host, create a room with the settings that you want. After creating it, share the url in the address bar in your browser to everyone that you want to connect into your room.
+- If you are the client, ask the host for the room url link to join in. 
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# What was used to be made
 
-## Build
+- Angular with Material UI Design
+- PeerJs (https://www.npmjs.com/package/peerjs): This lib made possible the interaction between two or more users inside a room, without the need of a backend server running.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+This application is designed to follow the bases of event sourcing architecture. A user will create the room and become responsable for the board. The host is responsable for handling the user commands, validating and broadcasting the events to all users connected to the host perform inside the board.
+  

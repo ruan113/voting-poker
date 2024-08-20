@@ -42,6 +42,7 @@
   <app-user-hand
     *ngIf="!getBoardState().areUserChoicesRevealed"
     [choice]="getCurrentUserChoice()"
+    [gameMode]="getCurrentUserGameMode()"
     (choiceChanged)="setChoice($event)"
   ></app-user-hand>
   <app-voting-result

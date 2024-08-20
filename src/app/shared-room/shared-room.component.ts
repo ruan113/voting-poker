@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Board, boardState } from 'src/_shared/board';
 import { BoardUser } from 'src/_shared/types/board-game-types';
+import { GameModeType } from 'src/_shared/types/events';
 import { waitUntil } from 'src/_shared/utils/wait-until';
 import { RTCService } from 'src/services/rtc.service';
 import { UserService } from 'src/services/user.service';
@@ -65,12 +66,18 @@ export class SharedRoomComponent {
 
   openInputUserNameModal(): void {
     const dialogRef = this.dialog.open(InputUserNameModalComponent, {
-      data: undefined,
+      data: {
+        name: undefined,
+        isViewer: false,
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.userService?.setUserName(result);
+        this.userService?.setUserName(result.name);
+        this.userService?.setUserGameMode(
+          result.isViewer ? 'Viewer' : 'Player',
+        );
       }
     });
   }
@@ -87,6 +94,12 @@ export class SharedRoomComponent {
 
   getCurrentUserChoice(): string | undefined {
     return this.getBoardState().getUserChoice(this.rtcService.myId);
+  }
+
+  getCurrentUserGameMode(): GameModeType {
+    return (
+      this.getBoardState().getUserGameMode(this.rtcService.myId) ?? 'Player'
+    );
   }
 
   goBackToLobby() {

@@ -4,5 +4,6 @@ export abstract class UserService {
   abstract resetChoices(): void;
   abstract revealUserChoices(): void;
   abstract setUserName(newName: string): void;
+  abstract setUserGameMode(gameMode: string): void;
   abstract disconnectUser(peerId?: string): void;
 }

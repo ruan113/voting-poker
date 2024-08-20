@@ -2,8 +2,15 @@
   <div *ngFor="let user of users" class="card-container">
     <div
       class="card-body"
-      [ngClass]="{ chosen: user.choice !== undefined && user.choice !== null }"
+      [ngClass]="{
+        chosen:
+          user.gameMode === 'Viewer' ||
+          (user.choice !== undefined && user.choice !== null)
+      }"
     >
+      <div class="viewer-icon-container" *ngIf="user.gameMode === 'Viewer'">
+        <mat-icon fontIcon="visibility"></mat-icon>
+      </div>
       <div class="away-icon-container" *ngIf="user.state === 'Away'">
         <mat-icon fontIcon="hotel"></mat-icon>
       </div>

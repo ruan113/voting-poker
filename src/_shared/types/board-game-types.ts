@@ -1,6 +1,9 @@
+import { GameModeType } from './events';
+
 export type BoardUser = {
   peerId: string;
   name: string;
+  gameMode: GameModeType;
   choice?: string;
   state: UserState;
 };

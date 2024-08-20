@@ -24,6 +24,20 @@
           width: fit-content;
         }
       }
+      .viewer-icon-container {
+        display: flex;
+        position: absolute;
+        top: 53%;
+        right: -21%;
+        transform: translate(-50%, -50%);
+
+        mat-icon {
+          color: white;
+          font-size: 25px;
+          height: fit-content;
+          width: fit-content;
+        }
+      }
     }
 
     .card-bottom-text {

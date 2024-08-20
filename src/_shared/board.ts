@@ -5,7 +5,7 @@ import {
   VotingSystemOption,
   votingSystemValues,
 } from './types/board-game-types';
-import { getBoardInitialState } from './types/events';
+import { GameModeType, getBoardInitialState } from './types/events';
 
 const DEFAULT_GAME_NAME = 'Planning poker game';
 const DEFAULT_VOTING_SYSTEM = votingSystemValues[0];
@@ -79,10 +79,24 @@ export class Board {
     return user?.choice;
   }
 
+  getUserGameMode(userPeerId: string): GameModeType | undefined {
+    const user = boardState.getUsers().find((it) => it.peerId === userPeerId);
+    return user?.gameMode;
+  }
+
   setUserName(userPeerId: string, userName: string): void {
     this._users = this._users.map((user) => {
       if (user.peerId === userPeerId) {
         user.name = userName;
+      }
+      return user;
+    });
+  }
+
+  setUserGameMode(userPeerId: string, gameMode: GameModeType): void {
+    this._users = this._users.map((user) => {
+      if (user.peerId === userPeerId) {
+        user.gameMode = gameMode;
       }
       return user;
     });
@@ -109,6 +123,7 @@ export class Board {
       peerId: userPeerId,
       name: this.getAnAnonymousName(),
       state: 'Connected',
+      gameMode: 'Player',
     });
   }
 

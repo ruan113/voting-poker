@@ -1,15 +1,16 @@
 <div class="container">
   <h1 mat-dialog-title>Who are you?</h1>
-  <div mat-dialog-content>
+  <div mat-dialog-content style="display: flex; flex-direction: column">
     <mat-form-field>
       <mat-label>Your name</mat-label>
       <input
         matInput
-        [(ngModel)]="data"
+        [(ngModel)]="data.name"
         (keyup.enter)="confirm()"
         cdkFocusInitial
       />
     </mat-form-field>
+    <mat-checkbox [(ngModel)]="data.isViewer">Enter as viewer</mat-checkbox>
   </div>
   <div mat-dialog-actions>
     <button mat-flat-button (click)="cancel()">Be anonymous</button>

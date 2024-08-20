@@ -9,7 +9,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 export class InputUserNameModalComponent {
   constructor(
     public dialogRef: MatDialogRef<InputUserNameModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string | undefined,
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      name: string | undefined;
+      isViewer: boolean;
+    },
   ) {}
 
   cancel(): void {

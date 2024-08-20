@@ -99,7 +99,7 @@ export class ClientService implements UserService {
         peerId: this.peerId,
       },
     };
-    boardState.setUserName(this.peerId, gameMode);
+    boardState.setUserGameMode(this.peerId, gameMode);
     this.hostConnection.send(event);
   }
 

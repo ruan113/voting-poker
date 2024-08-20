@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { isEmpty } from 'class-validator';
 import { Board, boardState } from 'src/_shared/board';
 import { BoardUser } from 'src/_shared/types/board-game-types';
 import { GameModeType } from 'src/_shared/types/events';
@@ -74,7 +75,7 @@ export class SharedRoomComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.userService?.setUserName(result.name);
+        if (!isEmpty(result.name)) this.userService?.setUserName(result.name);
         this.userService?.setUserGameMode(
           result.isViewer ? 'Viewer' : 'Player',
         );

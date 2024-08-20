@@ -1,6 +1,8 @@
 import { BoardState } from './board-game-types';
 import { Event } from './event-types';
 
+export type GameModeType = 'Player' | 'Viewer';
+
 export type ChoiceConfirmed = Event<
   'ChoiceConfirmed',
   { newChoice: string | undefined; peerId: string }
@@ -9,6 +11,11 @@ export type ChoiceConfirmed = Event<
 export type BoardReseted = Event<'BoardReseted', {}>;
 
 export type UserChoicesRevealed = Event<'UserChoicesRevealed', {}>;
+
+export type UserGameModeChanged = Event<
+  'UserGameModeChanged',
+  { peerId: string; newGameMode: GameModeType }
+>;
 
 export type UserNameChanged = Event<
   'UserNameChanged',
@@ -34,7 +41,10 @@ export type HostEvents =
   | BoardReseted
   | UserChoicesRevealed
   | UserNameChanged
+  | UserGameModeChanged
   | UserDisconnected
   | PingRecognized;
 
 export type ClientEvents = BoardStateUpdated | PingEmitted;
+
+export type AppEvent = HostEvents | ClientEvents;

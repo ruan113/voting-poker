@@ -6,9 +6,11 @@ import {
   BoardStateUpdated,
   ChoiceConfirmed,
   ClientEvents,
+  GameModeType,
   PingRecognized,
   UserChoicesRevealed,
   UserDisconnected,
+  UserGameModeChanged,
   UserNameChanged,
 } from 'src/_shared/types/events';
 import { UserService } from './user.service';
@@ -86,6 +88,18 @@ export class ClientService implements UserService {
       },
     };
     boardState.setUserName(this.peerId, newName);
+    this.hostConnection.send(event);
+  }
+
+  setUserGameMode(gameMode: GameModeType): void {
+    const event: UserGameModeChanged = {
+      type: 'UserGameModeChanged',
+      data: {
+        newGameMode: gameMode,
+        peerId: this.peerId,
+      },
+    };
+    boardState.setUserGameMode(this.peerId, gameMode);
     this.hostConnection.send(event);
   }
 

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { boardState } from 'src/_shared/board';
+import { GameModeType } from 'src/_shared/types/events';
 
 @Component({
   selector: 'app-user-hand',
@@ -8,6 +9,8 @@ import { boardState } from 'src/_shared/board';
 })
 export class UserHandComponent {
   options = boardState.votingSystem.cards;
+
+  @Input() gameMode: GameModeType = 'Player';
 
   @Input() choice: string | undefined = undefined;
   @Output() choiceChanged = new EventEmitter<string | undefined>();

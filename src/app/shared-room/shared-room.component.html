@@ -2,14 +2,28 @@
   <app-logo-with-title
     title="{{ getBoardState().gameName }}"
   ></app-logo-with-title>
-  <button
-    mat-flat-button
-    color="primary"
-    (click)="openInputUserNameModal()"
-    *ngIf="isConnected"
-  >
-    Change user name
-  </button>
+  <div>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="toggleCurrentUserGameMode()"
+    >
+      <ng-container *ngIf="getCurrentUserGameMode() === 'Player'"
+        >Viewer Mode</ng-container
+      >
+      <ng-container *ngIf="getCurrentUserGameMode() === 'Viewer'"
+        >Player Mode</ng-container
+      >
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="openInputUserNameModal()"
+      *ngIf="isConnected"
+    >
+      Change User Name
+    </button>
+  </div>
 </div>
 
 <div class="page-container">

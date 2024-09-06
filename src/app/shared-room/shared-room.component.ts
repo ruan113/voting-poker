@@ -69,7 +69,7 @@ export class SharedRoomComponent {
     const dialogRef = this.dialog.open(InputUserNameModalComponent, {
       data: {
         name: undefined,
-        isViewer: false,
+        isViewer: this.getCurrentUserGameMode() === 'Viewer',
       },
     });
 
@@ -101,6 +101,12 @@ export class SharedRoomComponent {
     return (
       this.getBoardState().getUserGameMode(this.rtcService.myId) ?? 'Player'
     );
+  }
+
+  toggleCurrentUserGameMode(): void {
+    if (this.getCurrentUserGameMode() === 'Player')
+      this.userService?.setUserGameMode('Viewer');
+    else this.userService?.setUserGameMode('Player');
   }
 
   goBackToLobby() {

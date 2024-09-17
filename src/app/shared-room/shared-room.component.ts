@@ -66,16 +66,20 @@ export class SharedRoomComponent {
   }
 
   openInputUserNameModal(): void {
+    const lastNameUsed = localStorage.getItem('lastNameUsed');
     const dialogRef = this.dialog.open(InputUserNameModalComponent, {
       data: {
-        name: undefined,
+        name: lastNameUsed,
         isViewer: this.getCurrentUserGameMode() === 'Viewer',
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        if (!isEmpty(result.name)) this.userService?.setUserName(result.name);
+        if (!isEmpty(result.name)) {
+          this.userService?.setUserName(result.name);
+          localStorage.setItem('lastNameUsed', result.name);
+        }
         this.userService?.setUserGameMode(
           result.isViewer ? 'Viewer' : 'Player',
         );

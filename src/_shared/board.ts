@@ -54,7 +54,9 @@ export class Board {
 
     const choices = Array.from(
       this._users.reduce((acc, it) => {
-        if (!isNaN(Number(it.choice))) acc.add(it.choice);
+        const isEmpty = it.choice === undefined || it.choice === null;
+        const isNumber = !isNaN(Number(it.choice));
+        if (!isEmpty && isNumber) acc.add(it.choice);
         return acc;
       }, new Set()),
     );

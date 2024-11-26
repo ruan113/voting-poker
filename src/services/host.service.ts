@@ -171,7 +171,7 @@ export class HostService implements UserService {
         const index = this.clientConnections.findIndex(
           (it) => it.peer === conn.peer,
         );
-        if (index !== -1) return;
+        if (index === -1) return;
 
         boardState.removeUserFromBoard(conn.peer);
         this.clientConnections.splice(index, 1);

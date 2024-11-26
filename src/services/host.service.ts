@@ -39,12 +39,8 @@ export class HostService implements UserService {
       boardState.initializeNewRound();
       this.sendBoardStateForAllClients();
     },
-    UserChoicesRevealed: (data: unknown) => {
-      const event = data as BoardStateUpdated;
-      if (
-        boardState.areUserChoicesRevealed === false &&
-        event.data.areUserChoicesRevealed === true
-      ) {
+    UserChoicesRevealed: (_: unknown) => {
+      if (boardState.areUserChoicesRevealed === false) {
         this.checkIfConfettiShouldDeploy();
       }
       boardState.revealUserChoices();

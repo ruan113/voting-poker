@@ -13,12 +13,19 @@ import {
   UserGameModeChanged,
   UserNameChanged,
 } from 'src/_shared/types/events';
+import { ConfettiService } from './confetti.service';
 import { UserService } from './user.service';
 
 export class ClientService implements UserService {
   private listeners: EventListenerContainer<ClientEvents> = {
     BoardStateUpdated: async (data: unknown) => {
       const event = data as BoardStateUpdated;
+      if (
+        boardState.areUserChoicesRevealed === false &&
+        event.data.areUserChoicesRevealed === true
+      ) {
+        this.checkIfConfettiShouldDeploy();
+      }
       boardState.updateBoardState(event.data);
     },
     PingEmitted: async (_: unknown) => {
@@ -42,6 +49,22 @@ export class ClientService implements UserService {
       if (!handleFn) return;
       handleFn(event);
     });
+  }
+
+  private checkIfConfettiShouldDeploy() {
+    const choices = Array.from(
+      boardState.getUsers().reduce((acc, it) => {
+        const isEmpty = it.choice === undefined || it.choice === null;
+        const isNumber = !isNaN(Number(it.choice));
+        if (!isEmpty && isNumber) acc.add(it.choice);
+        return acc;
+      }, new Set()),
+    );
+
+    if (choices.length === 1) {
+      const confettiService = new ConfettiService();
+      confettiService.execDefaultAnimation();
+    }
   }
 
   submitChoice(newChoice?: string): void {

@@ -17,6 +17,7 @@ import {
   UserNameChanged,
 } from 'src/_shared/types/events';
 import { addSecondsToDate } from 'src/_shared/utils/add-seconds-to-date';
+import { ConfettiService } from './confetti.service';
 import { RTCService } from './rtc.service';
 import { UserService } from './user.service';
 
@@ -38,7 +39,14 @@ export class HostService implements UserService {
       boardState.initializeNewRound();
       this.sendBoardStateForAllClients();
     },
-    UserChoicesRevealed: (_: unknown) => {
+    UserChoicesRevealed: (data: unknown) => {
+      const event = data as BoardStateUpdated;
+      if (
+        boardState.areUserChoicesRevealed === false &&
+        event.data.areUserChoicesRevealed === true
+      ) {
+        this.checkIfConfettiShouldDeploy();
+      }
       boardState.revealUserChoices();
       this.sendBoardStateForAllClients();
     },
@@ -88,6 +96,22 @@ export class HostService implements UserService {
         this.disconnectUserIfDidntAnsweredWithinXSeconds(client, 30);
       });
     }, 1000);
+  }
+
+  private checkIfConfettiShouldDeploy() {
+    const choices = Array.from(
+      boardState.getUsers().reduce((acc, it) => {
+        const isEmpty = it.choice === undefined || it.choice === null;
+        const isNumber = !isNaN(Number(it.choice));
+        if (!isEmpty && isNumber) acc.add(it.choice);
+        return acc;
+      }, new Set()),
+    );
+
+    if (choices.length === 1) {
+      const confettiService = new ConfettiService();
+      confettiService.execDefaultAnimation();
+    }
   }
 
   private pingAClient(client: ClientConnection): void {

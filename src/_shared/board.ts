@@ -1,4 +1,3 @@
-import { ConfettiService } from 'src/services/confetti.service';
 import {
   BoardState,
   BoardUser,
@@ -51,20 +50,6 @@ export class Board {
 
   revealUserChoices(): void {
     this._areUserChoicesRevealed = true;
-
-    const choices = Array.from(
-      this._users.reduce((acc, it) => {
-        const isEmpty = it.choice === undefined || it.choice === null;
-        const isNumber = !isNaN(Number(it.choice));
-        if (!isEmpty && isNumber) acc.add(it.choice);
-        return acc;
-      }, new Set()),
-    );
-
-    if (choices.length === 1) {
-      const confettiService = new ConfettiService();
-      confettiService.execDefaultAnimation();
-    }
   }
 
   setUserChoice(userPeerId: string, newChoice?: string): void {

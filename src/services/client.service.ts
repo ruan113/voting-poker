@@ -94,6 +94,7 @@ export class ClientService implements UserService {
       type: 'UserChoicesRevealed',
       data: {},
     };
+    this.checkIfConfettiShouldDeploy();
     boardState.revealUserChoices();
     this.hostConnection.send(event);
   }
